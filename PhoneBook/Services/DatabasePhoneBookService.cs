@@ -1,4 +1,5 @@
-﻿using System.Xml.Linq;
+﻿using System;
+using System.Xml.Linq;
 using PhoneBook.Exceptions;
 using PhoneBook.Model;
 
@@ -21,9 +22,24 @@ namespace PhoneBook.Services
                 throw new ArgumentException("Name and phone number must both be specified.");
             }
 
-            phoneBookEntry.Id = Guid.NewGuid();
-            _context.Add(phoneBookEntry);
-            Console.WriteLine("Added phoneBookEntry.");
+            // Check if phone number already exists
+            var entity = _context.PhoneBook.FirstOrDefault(p => p.PhoneNumber == phoneBookEntry.PhoneNumber);
+
+            if (entity != null)
+            {
+                // Update record with new name if phone number already exists
+                System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneBookEntry.PhoneNumber} from \"{entity.Name}\" to \"{phoneBookEntry.Name}\".");
+                entity.Name = phoneBookEntry.Name;
+            }
+            else
+            {
+                // Add a GUID to the new entry
+                phoneBookEntry.Id = Guid.NewGuid();
+
+                System.Diagnostics.Debug.WriteLine($"Adding {phoneBookEntry.Name} as the owner of phone number {phoneBookEntry.PhoneNumber}.");
+                _context.PhoneBook.Add(phoneBookEntry);
+            }
+
             Save();
         }
 
@@ -34,16 +50,30 @@ namespace PhoneBook.Services
                 throw new ArgumentException("Name and phone number must both be specified.");
             }
 
-            var phoneBookEntry = new PhoneBookEntry()
-            {
-                Id = Guid.NewGuid(),
-                Name = name,
-                PhoneNumber = phoneNumber
-            };
+            // Check if phone number already exists
+            var entity = _context.PhoneBook.FirstOrDefault(p => p.PhoneNumber == phoneNumber);
 
-            //_context.PhoneBook.Add(phoneBookEntry);
-            Console.WriteLine("Added name and phoneNumber.");
-            throw new NotImplementedException();
+            if (entity != null)
+            {
+                // Update record with new name if phone number already exists
+                System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneNumber} from \"{entity.Name}\" to \"{name}\".");
+                entity.Name = name;
+            }
+            else
+            {
+                // Add new record
+                var phoneBookEntry = new PhoneBookEntry()
+                {
+                    Id = Guid.NewGuid(),
+                    Name = name,
+                    PhoneNumber = phoneNumber
+                };
+
+                System.Diagnostics.Debug.WriteLine($"Adding {name} as the owner of phone number {phoneNumber}.");
+                _context.PhoneBook.Add(phoneBookEntry);
+            }
+
+            Save();
         }
 
         public void DeleteByName(string name)
