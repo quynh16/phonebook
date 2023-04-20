@@ -14,11 +14,21 @@ namespace PhoneBook.Services
 
         public void Add(PhoneBookEntry phoneBookEntry)
         {
-            throw new NotImplementedException();
+            // TODO: check if is a valid PhoneBookEntry
+            _context.Add(phoneBookEntry);
+            Save();
         }
 
         public void Add(string name, string phoneNumber)
         {
+            var phoneBookEntry = new PhoneBookEntry()
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                PhoneNumber = phoneNumber
+            };
+
+            _context.PhoneBook.Add(phoneBookEntry);
             throw new NotImplementedException();
         }
 
@@ -36,6 +46,12 @@ namespace PhoneBook.Services
         {
             return _context.PhoneBook.OrderBy(p => p.Id).ToList();
         }
+
+        public bool Save()
+        {
+            return _context.SaveChanges() > 0 ? true : false;
+        }
+
     }
 }
 

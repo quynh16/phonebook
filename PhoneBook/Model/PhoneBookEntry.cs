@@ -4,12 +4,12 @@ namespace PhoneBook.Model
 {
     public class PhoneBookEntry
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
 
-        [Required]
+        [Required (ErrorMessage = "Name and phone number must both be specified.")]
         public string? Name { get; set; }
 
-        [Required]
+        [Required (ErrorMessage = "Name and phone number must both be specified.")]
         public string? PhoneNumber { get; set; }
     }
 }
