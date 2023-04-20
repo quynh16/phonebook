@@ -21,6 +21,7 @@ namespace PhoneBook.Services
                 throw new ArgumentException("Name and phone number must both be specified.");
             }
 
+            phoneBookEntry.Id = Guid.NewGuid();
             _context.Add(phoneBookEntry);
             Console.WriteLine("Added phoneBookEntry.");
             Save();
