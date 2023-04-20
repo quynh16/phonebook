@@ -1,5 +1,7 @@
 using Microsoft.OpenApi.Models;
+using PhoneBook.Model;
 using PhoneBook.Services;
+using Microsoft.EntityFrameworkCore;
 
 namespace PhoneBook
 {
@@ -22,6 +24,11 @@ namespace PhoneBook
                     Title = "PhoneBook API",
                     Description = "A simple API for managing a phone book."
                 });
+            });
+
+            builder.Services.AddDbContext<PhoneBookContext>(options =>
+            {
+                options.UseSqlite(builder.Configuration.GetConnectionString("PhoneBookDatabase"));
             });
 
             builder.Services.AddSingleton<IPhoneBookService, DictionaryPhoneBookService>();

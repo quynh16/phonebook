@@ -4,6 +4,8 @@ namespace PhoneBook.Model
 {
     public class PhoneBookEntry
     {
+        public int Id { get; set; }
+
         [Required]
         public string? Name { get; set; }
 
