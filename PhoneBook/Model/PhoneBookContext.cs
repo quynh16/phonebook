@@ -9,7 +9,7 @@ namespace PhoneBook.Model
         {
         }
 
-        DbSet<PhoneBookEntry> PhoneBook { get; set; }
+        public DbSet<PhoneBookEntry> PhoneBook { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
