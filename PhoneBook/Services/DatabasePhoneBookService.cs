@@ -1,4 +1,5 @@
-﻿using PhoneBook.Exceptions;
+﻿using System.Xml.Linq;
+using PhoneBook.Exceptions;
 using PhoneBook.Model;
 
 namespace PhoneBook.Services
@@ -15,12 +16,23 @@ namespace PhoneBook.Services
         public void Add(PhoneBookEntry phoneBookEntry)
         {
             // TODO: check if is a valid PhoneBookEntry
+            if (phoneBookEntry.Name == null || phoneBookEntry.PhoneNumber == null)
+            {
+                throw new ArgumentException("Name and phone number must both be specified.");
+            }
+
             _context.Add(phoneBookEntry);
+            Console.WriteLine("Added phoneBookEntry.");
             Save();
         }
 
         public void Add(string name, string phoneNumber)
         {
+            if (name == null || phoneNumber == null)
+            {
+                throw new ArgumentException("Name and phone number must both be specified.");
+            }
+
             var phoneBookEntry = new PhoneBookEntry()
             {
                 Id = Guid.NewGuid(),
@@ -28,18 +40,33 @@ namespace PhoneBook.Services
                 PhoneNumber = phoneNumber
             };
 
-            _context.PhoneBook.Add(phoneBookEntry);
+            //_context.PhoneBook.Add(phoneBookEntry);
+            Console.WriteLine("Added name and phoneNumber.");
             throw new NotImplementedException();
         }
 
         public void DeleteByName(string name)
         {
-            throw new NotImplementedException();
+            var entity = _context.PhoneBook.Where(p => p.Name == name).FirstOrDefault();
+            if (entity == null)
+            {
+                throw new NotFoundException($"No phonebook entry found containing name {name}.");
+            }
+
+            _context.Remove(entity);
+            Save();
         }
 
         public void DeleteByNumber(string number)
         {
-            throw new NotImplementedException();
+            var entity = _context.PhoneBook.Where(p => p.PhoneNumber == number).FirstOrDefault();
+            if (entity == null)
+            {
+                throw new NotFoundException($"No phonebook entry found containing phone number {number}.");
+            }
+
+            _context.Remove(entity);
+            Save();
         }
 
         public IEnumerable<PhoneBookEntry> List()

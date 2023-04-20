@@ -14,6 +14,7 @@ namespace PhoneBook
             // Add services to the container.
 
             builder.Services.AddControllers();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(options =>
@@ -26,12 +27,14 @@ namespace PhoneBook
                 });
             });
 
+            // Add SQLite database
             builder.Services.AddDbContext<PhoneBookContext>(options =>
             {
                 options.UseSqlite(builder.Configuration.GetConnectionString("PhoneBookDatabase"));
             });
 
-            builder.Services.AddSingleton<IPhoneBookService, DictionaryPhoneBookService>();
+            builder.Services.AddScoped<IPhoneBookService, DatabasePhoneBookService>();
+            //builder.Services.AddSingleton<IPhoneBookService, DictionaryPhoneBookService>();
 
             var app = builder.Build();
 
