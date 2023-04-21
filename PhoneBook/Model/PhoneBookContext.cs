@@ -9,11 +9,11 @@ namespace PhoneBook.Model
         {
         }
 
-        public DbSet<PhoneBookEntry> PhoneBook { get; set; }
+        public DbSet<PhoneBookEntryDB> PhoneBook { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<PhoneBookEntry>(entity =>
+            modelBuilder.Entity<PhoneBookEntryDB>(entity =>
             {
                 entity.HasKey(e => e.Id);
                 entity.Property(e => e.Name).HasMaxLength(250);

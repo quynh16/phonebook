@@ -20,7 +20,7 @@ namespace PhoneBook.Controllers
 
         [HttpGet]
         [Route("list")]
-        public IEnumerable<PhoneBookDTO> List()
+        public IEnumerable<PhoneBookEntry> List()
         {
             _logger.LogInformation("Listing phone book entries");
             return _phoneBookService.List();
@@ -28,7 +28,7 @@ namespace PhoneBook.Controllers
 
         [HttpPost]
         [Route("add")] 
-        public IActionResult Add([FromBody]PhoneBookDTO newEntry)
+        public IActionResult Add([FromBody] PhoneBookEntry newEntry)
         {
             if (!ModelState.IsValid)
             {

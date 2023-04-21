@@ -12,14 +12,14 @@ namespace PhoneBook.Services
             _phoneBookEntries = new Dictionary<string, string>();
         }
 
-        public bool Add(PhoneBookDTO phoneBookDTO)
+        public bool Add(PhoneBookEntry phoneBookEntry)
         {
-            if (phoneBookDTO.Name == null || phoneBookDTO.PhoneNumber == null)
+            if (phoneBookEntry.Name == null || phoneBookEntry.PhoneNumber == null)
             {
                 throw new ArgumentException("Name and phone number must both be specified.");
             }
 
-            _phoneBookEntries.Add(phoneBookDTO.Name, phoneBookDTO.PhoneNumber);
+            _phoneBookEntries.Add(phoneBookEntry.Name, phoneBookEntry.PhoneNumber);
 
             return true;
         }
@@ -36,13 +36,13 @@ namespace PhoneBook.Services
             return true;
         }
 
-        public IEnumerable<PhoneBookDTO> List()
+        public IEnumerable<PhoneBookEntry> List()
         {
-            List<PhoneBookDTO> entriesList = new List<PhoneBookDTO>();
+            List<PhoneBookEntry> entriesList = new List<PhoneBookEntry>();
 
             foreach (var name in _phoneBookEntries.Keys)
             {
-                entriesList.Add(new PhoneBookDTO { Name = name, PhoneNumber = _phoneBookEntries[name] });
+                entriesList.Add(new PhoneBookEntry { Name = name, PhoneNumber = _phoneBookEntries[name] });
             }
 
             return entriesList;

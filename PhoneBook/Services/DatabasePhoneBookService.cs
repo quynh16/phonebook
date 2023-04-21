@@ -14,39 +14,39 @@ namespace PhoneBook.Services
 			_context = context;
 		}
 
-        public bool Add(PhoneBookDTO phoneBookDTO)
+        public bool Add(PhoneBookEntry phoneBookEntry)
         {
             // TODO: check if is a valid PhoneBookEntry
-            if (phoneBookDTO.Name == null || phoneBookDTO.PhoneNumber == null)
+            if (phoneBookEntry.Name == null || phoneBookEntry.PhoneNumber == null)
             {
                 throw new ArgumentException("Name and phone number must both be specified.");
             }
 
             // Check if phone number already exists
-            var entity = _context.PhoneBook.FirstOrDefault(p => p.Name == phoneBookDTO.Name || p.PhoneNumber == phoneBookDTO.PhoneNumber);
+            var entity = _context.PhoneBook.FirstOrDefault(p => p.Name == phoneBookEntry.Name || p.PhoneNumber == phoneBookEntry.PhoneNumber);
 
             if (entity != null)
             {
                 // Update record if it already exists
-                if (entity.Name == phoneBookDTO.Name)
+                if (entity.Name == phoneBookEntry.Name)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Updating phone number of \"{entity.Name}\" from {entity.PhoneNumber} to {phoneBookDTO.PhoneNumber}");
-                    entity.PhoneNumber = phoneBookDTO.PhoneNumber;
+                    System.Diagnostics.Debug.WriteLine($"Updating phone number of \"{entity.Name}\" from {entity.PhoneNumber} to {phoneBookEntry.PhoneNumber}");
+                    entity.PhoneNumber = phoneBookEntry.PhoneNumber;
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneBookDTO.PhoneNumber} from \"{entity.Name}\" to \"{phoneBookDTO.Name}\"");
-                    entity.Name = phoneBookDTO.Name;
+                    System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneBookEntry.PhoneNumber} from \"{entity.Name}\" to \"{phoneBookEntry.Name}\"");
+                    entity.Name = phoneBookEntry.Name;
                 }
             }
             else
             {
                 // Create a new PhoneBookEntry with a random GUID
-                PhoneBookEntry newEntry = new PhoneBookEntry
+                PhoneBookEntryDB newEntry = new PhoneBookEntryDB
                 {
                     Id = Guid.NewGuid(),
-                    Name = phoneBookDTO.Name,
-                    PhoneNumber = phoneBookDTO.PhoneNumber
+                    Name = phoneBookEntry.Name,
+                    PhoneNumber = phoneBookEntry.PhoneNumber
                 };
 
                 System.Diagnostics.Debug.WriteLine($"Adding {newEntry.Name} as the owner of phone number {newEntry.PhoneNumber}");
@@ -84,15 +84,15 @@ namespace PhoneBook.Services
             else
             {
                 // Add new record
-                var phoneBookEntry = new PhoneBookEntry()
+                var newEntry = new PhoneBookEntryDB()
                 {
                     Id = Guid.NewGuid(),
                     Name = name,
                     PhoneNumber = phoneNumber
                 };
 
-                System.Diagnostics.Debug.WriteLine($"Adding {name} as the owner of phone number {phoneNumber}");
-                _context.PhoneBook.Add(phoneBookEntry);
+                System.Diagnostics.Debug.WriteLine($"Adding \"{name}\" as the owner of phone number {phoneNumber}");
+                _context.PhoneBook.Add(newEntry);
             }
 
             var saved = Save();
@@ -104,7 +104,7 @@ namespace PhoneBook.Services
             var entity = _context.PhoneBook.Where(p => p.Name == name).FirstOrDefault();
             if (entity == null)
             {
-                throw new NotFoundException($"No phonebook entry found containing name {name}");
+                throw new NotFoundException($"No phonebook entry found containing name \"{name}\"");
             }
 
             _context.Remove(entity);
@@ -128,9 +128,9 @@ namespace PhoneBook.Services
             return saved ? name : null;
         }
 
-        public IEnumerable<PhoneBookDTO> List()
+        public IEnumerable<PhoneBookEntry> List()
         {
-            return _context.PhoneBook.Select(x => new PhoneBookDTO
+            return _context.PhoneBook.Select(x => new PhoneBookEntry
             {
                 Name = x.Name, PhoneNumber = x.PhoneNumber
             });
