@@ -2,6 +2,7 @@ using Microsoft.OpenApi.Models;
 using PhoneBook.Model;
 using PhoneBook.Services;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 namespace PhoneBook
 {
@@ -26,6 +27,8 @@ namespace PhoneBook
                     Description = "A simple API for managing a phone book."
                 });
             });
+
+            
 
             // Add SQLite database
             builder.Services.AddDbContext<PhoneBookContext>(options =>
