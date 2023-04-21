@@ -13,7 +13,7 @@ namespace PhoneBook.Model
         public string? Name { get; set; }
 
         [Required (ErrorMessage = "Name and phone number must both be specified.")]
-        [RegularExpression("^((\\+?([0-9]{0,3})( [0-1])?((\\([0-9]{3}\\))|( (\\([0-9]{2}\\)) )|( [0-9]{3}) )?)?[0-9]{3}(-| )[0-9]{4})$|^([0-9]{5}(\\.([0-9]{5}))?)$")]
+        [RegularExpression(@"^((\+?([0-9]{0,3})( [0-9])?( ?(\([0-9]{3}\))|( (\([0-9]{2}\)) )|([ -.]?[0-9]{2,3})[ -.])?)?[0-9]{2,3}[ -.][0-9]{2,4}([ -.][0-9]{2,4})?)$|^([0-9]{5}([ .]([0-9]{5}))?)$")]
         public string? PhoneNumber { get; set; }
     }
 }
