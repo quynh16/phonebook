@@ -22,11 +22,12 @@ namespace PhoneBook.Controllers
         [Route("list")]
         public IEnumerable<PhoneBookEntry> List()
         {
+            _logger.LogInformation("Adding");
             return _phoneBookService.List();
         }
 
         [HttpPost]
-        [Route("add")]
+        [Route("add")] 
         public IActionResult Add([FromBody]PhoneBookEntry newEntry)
         {
             if (!ModelState.IsValid)
@@ -35,6 +36,7 @@ namespace PhoneBook.Controllers
             }
 
             _phoneBookService.Add(newEntry);
+            _logger.LogInformation("Adding");
 
             return Ok();
         }
