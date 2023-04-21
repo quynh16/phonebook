@@ -19,5 +19,5 @@ RUN dotnet publish "PhoneBook.csproj" -c Release -o /app/publish /p:UseAppHost=f
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-COPY PhoneBook/PhoneBook.db PhoneBook.db
+COPY PhoneBook/Databases/PhoneBook.db Databases/PhoneBook.db
 ENTRYPOINT ["dotnet", "PhoneBook.dll"]

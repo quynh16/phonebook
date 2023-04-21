@@ -21,4 +21,10 @@
     <PackageReference Include="Serilog.Sinks.File" Version="5.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="Databases\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Databases\" />
+  </ItemGroup>
 </Project>
