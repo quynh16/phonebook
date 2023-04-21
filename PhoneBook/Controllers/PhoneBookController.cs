@@ -22,7 +22,7 @@ namespace PhoneBook.Controllers
         [Route("list")]
         public IEnumerable<PhoneBookEntry> List()
         {
-            _logger.LogInformation("Adding");
+            _logger.LogInformation("Listing phone book entries");
             return _phoneBookService.List();
         }
 
@@ -36,7 +36,7 @@ namespace PhoneBook.Controllers
             }
 
             _phoneBookService.Add(newEntry);
-            _logger.LogInformation("Adding");
+            _logger.LogInformation("Entry [{Name}, {PhoneNumber}] added", newEntry.Name, newEntry.PhoneNumber);
 
             return Ok();
         }
@@ -48,7 +48,7 @@ namespace PhoneBook.Controllers
             try
             {
                 _phoneBookService.DeleteByName(name);
-
+                _logger.LogInformation("Entry [{Name}] deleted", name);
                 return Ok();
             }
             catch (NotFoundException ex)
@@ -61,10 +61,12 @@ namespace PhoneBook.Controllers
         [Route("deleteByNumber")]
         public IActionResult DeleteByNumber([FromQuery] string number)
         {
+            string? name;
+
             try
             {
-                _phoneBookService.DeleteByNumber(number);
-
+                name = _phoneBookService.DeleteByNumber(number);
+                _logger.LogInformation("Entry [{Name}] deleted", name);
                 return Ok();
             }
             catch (NotFoundException ex)

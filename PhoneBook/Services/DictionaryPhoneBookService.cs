@@ -12,7 +12,7 @@ namespace PhoneBook.Services
             _phoneBookEntries = new Dictionary<string, string>();
         }
 
-        public void Add(PhoneBookEntry phoneBookEntry)
+        public bool Add(PhoneBookEntry phoneBookEntry)
         {
             if (phoneBookEntry.Name == null || phoneBookEntry.PhoneNumber == null)
             {
@@ -20,9 +20,11 @@ namespace PhoneBook.Services
             }
 
             _phoneBookEntries.Add(phoneBookEntry.Name, phoneBookEntry.PhoneNumber);
+
+            return true;
         }
 
-        public void Add(string name, string phoneNumber)
+        public bool Add(string name, string phoneNumber)
         {
             if (name == null || phoneNumber == null)
             {
@@ -30,6 +32,8 @@ namespace PhoneBook.Services
             }
 
             _phoneBookEntries.Add(name, phoneNumber);
+
+            return true;
         }
 
         public IEnumerable<PhoneBookEntry> List()
@@ -44,7 +48,7 @@ namespace PhoneBook.Services
             return entriesList;
         }
 
-        public void DeleteByName(string name)
+        public string? DeleteByName(string name)
         {
             if (!_phoneBookEntries.ContainsKey(name))
             {
@@ -52,9 +56,10 @@ namespace PhoneBook.Services
             }
 
             _phoneBookEntries.Remove(name);
+            return name;
         }
 
-        public void DeleteByNumber(string number)
+        public string? DeleteByNumber(string number)
         {
             var name = _phoneBookEntries.Where(kvp => kvp.Value == number).FirstOrDefault().Key;
             if (name == null)
@@ -63,6 +68,7 @@ namespace PhoneBook.Services
             }
 
             _phoneBookEntries.Remove(name);
+            return name;
         }
     }
 }

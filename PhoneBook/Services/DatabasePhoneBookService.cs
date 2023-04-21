@@ -14,7 +14,7 @@ namespace PhoneBook.Services
 			_context = context;
 		}
 
-        public void Add(PhoneBookEntry phoneBookEntry)
+        public bool Add(PhoneBookEntry phoneBookEntry)
         {
             // TODO: check if is a valid PhoneBookEntry
             if (phoneBookEntry.Name == null || phoneBookEntry.PhoneNumber == null)
@@ -40,10 +40,11 @@ namespace PhoneBook.Services
                 _context.PhoneBook.Add(phoneBookEntry);
             }
 
-            Save();
+            var saved = Save();
+            return saved;
         }
 
-        public void Add(string name, string phoneNumber)
+        public bool Add(string name, string phoneNumber)
         {
             if (name == null || phoneNumber == null)
             {
@@ -73,10 +74,11 @@ namespace PhoneBook.Services
                 _context.PhoneBook.Add(phoneBookEntry);
             }
 
-            Save();
+            var saved = Save();
+            return saved;
         }
 
-        public void DeleteByName(string name)
+        public string? DeleteByName(string name)
         {
             var entity = _context.PhoneBook.Where(p => p.Name == name).FirstOrDefault();
             if (entity == null)
@@ -85,10 +87,12 @@ namespace PhoneBook.Services
             }
 
             _context.Remove(entity);
-            Save();
+            var saved = Save();
+
+            return saved ? name : null;
         }
 
-        public void DeleteByNumber(string number)
+        public string? DeleteByNumber(string number)
         {
             var entity = _context.PhoneBook.Where(p => p.PhoneNumber == number).FirstOrDefault();
             if (entity == null)
@@ -96,8 +100,11 @@ namespace PhoneBook.Services
                 throw new NotFoundException($"No phonebook entry found containing phone number {number}.");
             }
 
+            var name = entity.Name;
             _context.Remove(entity);
-            Save();
+            var saved = Save();
+
+            return saved ? name : null;
         }
 
         public IEnumerable<PhoneBookEntry> List()
