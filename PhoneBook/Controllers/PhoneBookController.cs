@@ -53,6 +53,7 @@ namespace PhoneBook.Controllers
             }
             catch (NotFoundException ex)
             {
+                _logger.LogError("Failed to delete: Name [{Name}] does not exist", name);
                 return NotFound(ex.Message);
             }
         }
@@ -71,6 +72,7 @@ namespace PhoneBook.Controllers
             }
             catch (NotFoundException ex)
             {
+                _logger.LogError("Failed to delete: Number [{Number}] does not exist", number);
                 return NotFound(ex.Message);
             }
         }
