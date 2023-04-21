@@ -35,8 +35,8 @@ namespace PhoneBook.Controllers
                 return BadRequest(ModelState);
             }
 
-            _phoneBookService.Add(newEntry);
-            _logger.LogInformation("Entry [{Name}, {PhoneNumber}] added", newEntry.Name, newEntry.PhoneNumber);
+            if (_phoneBookService.Add(newEntry))
+                _logger.LogInformation("Entry [{Name}, {PhoneNumber}] added", newEntry.Name, newEntry.PhoneNumber);
 
             return Ok();
         }

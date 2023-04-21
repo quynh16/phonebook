@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Xml.Linq;
+using PhoneBook.Controllers;
 using PhoneBook.Exceptions;
 using PhoneBook.Model;
 
@@ -8,14 +9,18 @@ namespace PhoneBook.Services
 	public class DatabasePhoneBookService : IPhoneBookService
     {
 		private readonly PhoneBookContext _context;
+        private readonly ILogger<DatabasePhoneBookService> _logger;
 
-		public DatabasePhoneBookService(PhoneBookContext context)
+        public DatabasePhoneBookService(PhoneBookContext context, ILogger<DatabasePhoneBookService> logger)
 		{
 			_context = context;
+            _logger = logger;
 		}
 
         public bool Add(PhoneBookEntry phoneBookEntry)
         {
+            var retVal = false;
+
             // TODO: check if is a valid PhoneBookEntry
             if (phoneBookEntry.Name == null || phoneBookEntry.PhoneNumber == null)
             {
@@ -28,15 +33,19 @@ namespace PhoneBook.Services
             if (entity != null)
             {
                 // Update record if it already exists
-                if (entity.Name == phoneBookEntry.Name)
+                if (entity.Name == phoneBookEntry.Name && entity.PhoneNumber != phoneBookEntry.PhoneNumber)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Updating phone number of \"{entity.Name}\" from {entity.PhoneNumber} to {phoneBookEntry.PhoneNumber}");
+                    _logger.LogInformation("Updating phone number of {Name} from {OldNumber} to {NewNumber}", entity.Name, entity.PhoneNumber, phoneBookEntry.PhoneNumber);
                     entity.PhoneNumber = phoneBookEntry.PhoneNumber;
+                }
+                else if (entity.PhoneNumber == phoneBookEntry.PhoneNumber && entity.Name != phoneBookEntry.Name)
+                {
+                    _logger.LogInformation("Updating phone number of {Number} from {OldName} to {NewName}", entity.PhoneNumber, entity.Name, phoneBookEntry.Name);
+                    entity.Name = phoneBookEntry.Name;
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneBookEntry.PhoneNumber} from \"{entity.Name}\" to \"{phoneBookEntry.Name}\"");
-                    entity.Name = phoneBookEntry.Name;
+                    _logger.LogInformation("Entry [{Name}, {Number}] already exists in database", phoneBookEntry.Name, phoneBookEntry.PhoneNumber);
                 }
             }
             else
@@ -48,17 +57,18 @@ namespace PhoneBook.Services
                     Name = phoneBookEntry.Name,
                     PhoneNumber = phoneBookEntry.PhoneNumber
                 };
-
-                System.Diagnostics.Debug.WriteLine($"Adding {newEntry.Name} as the owner of phone number {newEntry.PhoneNumber}");
                 _context.PhoneBook.Add(newEntry);
+                retVal = true;
             }
 
             var saved = Save();
-            return saved;
+            return retVal;
         }
 
         public bool Add(string name, string phoneNumber)
         {
+            var retVal = false;
+
             if (name == null || phoneNumber == null)
             {
                 throw new ArgumentException("Name and phone number must both be specified.");
@@ -70,15 +80,19 @@ namespace PhoneBook.Services
             if (entity != null)
             {
                 // Update record if it already exists
-                if (entity.Name == name)
+                if (entity.Name == name && entity.PhoneNumber != phoneNumber)
                 {
-                    System.Diagnostics.Debug.WriteLine($"Updating phone number of \"{entity.Name}\" from {entity.PhoneNumber} to {phoneNumber}");
+                    _logger.LogInformation("Updating phone number of {Name} from {OldNumber} to {NewNumber}", entity.Name, entity.PhoneNumber, phoneNumber);
                     entity.PhoneNumber = phoneNumber;
+                }
+                else if (entity.PhoneNumber == phoneNumber && entity.Name != name)
+                {
+                    _logger.LogInformation("Updating phone number of {Number} from {OldName} to {NewName}", entity.PhoneNumber, entity.Name, name);
+                    entity.Name = name;
                 }
                 else
                 {
-                    System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneNumber} from \"{entity.Name}\" to \"{name}\"");
-                    entity.Name = name;
+                    _logger.LogInformation("Entry [{Name}, {Number}] already exists", name, phoneNumber);
                 }
             }
             else
@@ -90,13 +104,12 @@ namespace PhoneBook.Services
                     Name = name,
                     PhoneNumber = phoneNumber
                 };
-
-                System.Diagnostics.Debug.WriteLine($"Adding \"{name}\" as the owner of phone number {phoneNumber}");
                 _context.PhoneBook.Add(newEntry);
+                retVal = true;
             }
 
             var saved = Save();
-            return saved;
+            return retVal;
         }
 
         public string? DeleteByName(string name)
