@@ -23,13 +23,21 @@ namespace PhoneBook.Services
             }
 
             // Check if phone number already exists
-            var entity = _context.PhoneBook.FirstOrDefault(p => p.PhoneNumber == phoneBookDTO.PhoneNumber);
+            var entity = _context.PhoneBook.FirstOrDefault(p => p.Name == phoneBookDTO.Name || p.PhoneNumber == phoneBookDTO.PhoneNumber);
 
             if (entity != null)
             {
-                // Update record with new name if phone number already exists
-                System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneBookDTO.PhoneNumber} from \"{entity.Name}\" to \"{phoneBookDTO.Name}\".");
-                entity.Name = phoneBookDTO.Name;
+                // Update record if it already exists
+                if (entity.Name == phoneBookDTO.Name)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Updating phone number of \"{entity.Name}\" from {entity.PhoneNumber} to {phoneBookDTO.PhoneNumber}");
+                    entity.PhoneNumber = phoneBookDTO.PhoneNumber;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneBookDTO.PhoneNumber} from \"{entity.Name}\" to \"{phoneBookDTO.Name}\"");
+                    entity.Name = phoneBookDTO.Name;
+                }
             }
             else
             {
@@ -41,7 +49,7 @@ namespace PhoneBook.Services
                     PhoneNumber = phoneBookDTO.PhoneNumber
                 };
 
-                System.Diagnostics.Debug.WriteLine($"Adding {newEntry.Name} as the owner of phone number {newEntry.PhoneNumber}.");
+                System.Diagnostics.Debug.WriteLine($"Adding {newEntry.Name} as the owner of phone number {newEntry.PhoneNumber}");
                 _context.PhoneBook.Add(newEntry);
             }
 
@@ -57,13 +65,21 @@ namespace PhoneBook.Services
             }
 
             // Check if phone number already exists
-            var entity = _context.PhoneBook.FirstOrDefault(p => p.PhoneNumber == phoneNumber);
+            var entity = _context.PhoneBook.FirstOrDefault(p => p.Name == name || p.PhoneNumber == phoneNumber);
 
             if (entity != null)
             {
-                // Update record with new name if phone number already exists
-                System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneNumber} from \"{entity.Name}\" to \"{name}\".");
-                entity.Name = name;
+                // Update record if it already exists
+                if (entity.Name == name)
+                {
+                    System.Diagnostics.Debug.WriteLine($"Updating phone number of \"{entity.Name}\" from {entity.PhoneNumber} to {phoneNumber}");
+                    entity.PhoneNumber = phoneNumber;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneNumber} from \"{entity.Name}\" to \"{name}\"");
+                    entity.Name = name;
+                }
             }
             else
             {
@@ -75,7 +91,7 @@ namespace PhoneBook.Services
                     PhoneNumber = phoneNumber
                 };
 
-                System.Diagnostics.Debug.WriteLine($"Adding {name} as the owner of phone number {phoneNumber}.");
+                System.Diagnostics.Debug.WriteLine($"Adding {name} as the owner of phone number {phoneNumber}");
                 _context.PhoneBook.Add(phoneBookEntry);
             }
 
@@ -88,7 +104,7 @@ namespace PhoneBook.Services
             var entity = _context.PhoneBook.Where(p => p.Name == name).FirstOrDefault();
             if (entity == null)
             {
-                throw new NotFoundException($"No phonebook entry found containing name {name}.");
+                throw new NotFoundException($"No phonebook entry found containing name {name}");
             }
 
             _context.Remove(entity);
@@ -102,7 +118,7 @@ namespace PhoneBook.Services
             var entity = _context.PhoneBook.Where(p => p.PhoneNumber == number).FirstOrDefault();
             if (entity == null)
             {
-                throw new NotFoundException($"No phonebook entry found containing phone number {number}.");
+                throw new NotFoundException($"No phonebook entry found containing phone number {number}");
             }
 
             var name = entity.Name;
