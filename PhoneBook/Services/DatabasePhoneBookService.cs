@@ -14,30 +14,35 @@ namespace PhoneBook.Services
 			_context = context;
 		}
 
-        public bool Add(PhoneBookEntry phoneBookEntry)
+        public bool Add(PhoneBookDTO phoneBookDTO)
         {
             // TODO: check if is a valid PhoneBookEntry
-            if (phoneBookEntry.Name == null || phoneBookEntry.PhoneNumber == null)
+            if (phoneBookDTO.Name == null || phoneBookDTO.PhoneNumber == null)
             {
                 throw new ArgumentException("Name and phone number must both be specified.");
             }
 
             // Check if phone number already exists
-            var entity = _context.PhoneBook.FirstOrDefault(p => p.PhoneNumber == phoneBookEntry.PhoneNumber);
+            var entity = _context.PhoneBook.FirstOrDefault(p => p.PhoneNumber == phoneBookDTO.PhoneNumber);
 
             if (entity != null)
             {
                 // Update record with new name if phone number already exists
-                System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneBookEntry.PhoneNumber} from \"{entity.Name}\" to \"{phoneBookEntry.Name}\".");
-                entity.Name = phoneBookEntry.Name;
+                System.Diagnostics.Debug.WriteLine($"Updating owner of phone number {phoneBookDTO.PhoneNumber} from \"{entity.Name}\" to \"{phoneBookDTO.Name}\".");
+                entity.Name = phoneBookDTO.Name;
             }
             else
             {
-                // Add a GUID to the new entry
-                phoneBookEntry.Id = Guid.NewGuid();
+                // Create a new PhoneBookEntry with a random GUID
+                PhoneBookEntry newEntry = new PhoneBookEntry
+                {
+                    Id = Guid.NewGuid(),
+                    Name = phoneBookDTO.Name,
+                    PhoneNumber = phoneBookDTO.PhoneNumber
+                };
 
-                System.Diagnostics.Debug.WriteLine($"Adding {phoneBookEntry.Name} as the owner of phone number {phoneBookEntry.PhoneNumber}.");
-                _context.PhoneBook.Add(phoneBookEntry);
+                System.Diagnostics.Debug.WriteLine($"Adding {newEntry.Name} as the owner of phone number {newEntry.PhoneNumber}.");
+                _context.PhoneBook.Add(newEntry);
             }
 
             var saved = Save();
@@ -107,9 +112,12 @@ namespace PhoneBook.Services
             return saved ? name : null;
         }
 
-        public IEnumerable<PhoneBookEntry> List()
+        public IEnumerable<PhoneBookDTO> List()
         {
-            return _context.PhoneBook.OrderBy(p => p.Id).ToList();
+            return _context.PhoneBook.Select(x => new PhoneBookDTO
+            {
+                Name = x.Name, PhoneNumber = x.PhoneNumber
+            });
         }
 
         public bool Save()
