@@ -30,11 +30,11 @@ namespace PhoneBook
 
             // Add Logger
             var logger = new LoggerConfiguration()
-            .ReadFrom.Configuration(builder.Configuration)
-            .Enrich.FromLogContext()
-            .CreateLogger();
-                builder.Logging.ClearProviders();
-                builder.Logging.AddSerilog(logger);
+                            .ReadFrom.Configuration(builder.Configuration)
+                            .Enrich.FromLogContext()
+                            .CreateLogger();
+
+            builder.Logging.AddSerilog(logger);
 
             // Add SQLite database
             builder.Services.AddDbContext<PhoneBookContext>(options =>
