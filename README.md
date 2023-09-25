@@ -1,5 +1,5 @@
 # 1. Installation
-### 1.1 Build
+## 1.1 Build
 
 Clone the PhoneBook repository or download the project folder.
 
@@ -21,7 +21,7 @@ The corresponding output should look similar to:
 
 ![Output of Docker build](./img/img_1.png)
 
-### 1.2 Run
+## 1.2 Run
 
 To run the web server in the container and be able to access it on your host machine, you need to map port 80 from the container to an available port on your host machine.
 
@@ -42,21 +42,21 @@ For example, to list the phone book entries, visit `localhost:8080/PhoneBook/lis
 ![Sample browser URL field](./img/img_3.png)
 
 # 2. Architecture 
-### 2.1 Overall Architecture
+## 2.1 Overall Architecture
 
 The REST API follows a basic model-view-controller (MVC) pattern but without the view as this backend only serves data in the form of JSON objects, not HTML content. 
 
 When HTTP requests are sent to the port (80 on the container), the router maps each endpoint to a corresponding “action function.” 
 These “action functions” are defined by the controller, or specifically, the `PhoneBookController`, and they determine how the server should respond to the request.
 
-### 2.2 Dependencies
+## 2.2 Dependencies
 
 The `PhoneBookController` has 2 dependencies, an `IPhoneBookService` and `ILogger`. 
 
 At build time, the ASP.NET Core builder injects the 2 dependencies into the controller. 
 Specifically, for this application, the `DatabasePhoneBookService` is injected as the `IPhoneBookService`, and `ILogger` is automatically injected by ASP.NET Core.
 
-### 2.3 DatabasePhoneBookService
+## 2.3 DatabasePhoneBookService
 
 The `DatabasePhoneBookService` provides the business logic of the application. 
 
@@ -66,14 +66,14 @@ Because the `DatabasePhoneBookService` is dependent on a `DbContext`, a scoped o
 
 The `DatabasePhoneBookService` is also dependent on an `ILogger`, which again, is automatically injected by ASP.NET Core.
 
-### 2.4 Logger
+## 2.4 Logger
 
 The specific logger used in this REST API is the `Serilog` logger. 
 
 This logger is injected as an `ILogger` object into the `PhoneBookController` and `DatabasePhoneBookService` to audit any API calls, such as listing the phone book contents, adding a new entry, 
 and removing entries. The logger logs the timestamp, log level, log source, message, and exception associated with the log (if any).
 
-### 2.5 Models
+## 2.5 Models
 
 `PhoneBookEntry`: This is the actual object that users are exposed to via the API. 
 It contains 2 fields, a name and number, both of which are strings. 
@@ -83,7 +83,7 @@ The regular expressions are matched and enforced automatically by ASP.NET Core�
 `PhoneBookEntryDB`: This model is what gets actually stored in the database. 
 It has the same fields as the `PhoneBookEntry` object with an additional GUID field to serve as the primary key. Users are not exposed to this model.
 
-### 2.6 Persistent Storage
+## 2.6 Persistent Storage
 
 For persistent storage, an SQLite database is used.
 
