@@ -1,9 +1,8 @@
 {
 	"info": {
-		"_postman_id": "6aaca1b3-10c4-46d5-92e6-88d892eea89f",
+		"_postman_id": "651ae12d-40df-44ef-bb9a-67a8c1a6f5dd",
 		"name": "PhoneBookAPITests",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "23652867"
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
@@ -116,7 +115,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"Bruce Schneier\",\n  \"phoneNumber\": \"00002\"\n}",
+									"raw": "{\n  \"name\": \"Schneier, Bruce Wayne\",\n  \"phoneNumber\": \"00002\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1826,7 +1825,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"User J\",\n  \"phoneNumber\": \"12 34 56 78\"\n}",
+									"raw": "{\n  \"name\": \"User R\",\n  \"phoneNumber\": \"12 34 56 78\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1868,7 +1867,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"User J\",\n  \"phoneNumber\": \"12.34.56.78\"\n}",
+									"raw": "{\n  \"name\": \"User S\",\n  \"phoneNumber\": \"12.34.56.78\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1910,7 +1909,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"User J\",\n  \"phoneNumber\": \"1234 5678\"\n}",
+									"raw": "{\n  \"name\": \"User T\",\n  \"phoneNumber\": \"1234 5678\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1952,7 +1951,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"User J\",\n  \"phoneNumber\": \"1234.5678\"\n}",
+									"raw": "{\n  \"name\": \"User U\",\n  \"phoneNumber\": \"1234.5678\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1994,7 +1993,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"User J\",\n  \"phoneNumber\": \"+45 1234 1234\"\n}",
+									"raw": "{\n  \"name\": \"User V\",\n  \"phoneNumber\": \"+45 1234 1234\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2036,7 +2035,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"User J\",\n  \"phoneNumber\": \"45.1234.1234\"\n}",
+									"raw": "{\n  \"name\": \"User W\",\n  \"phoneNumber\": \"45.1234.1234\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2078,7 +2077,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"User J\",\n  \"phoneNumber\": \"+45 12 34 56 78\"\n}",
+									"raw": "{\n  \"name\": \"User X\",\n  \"phoneNumber\": \"+45 12 34 56 78\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2120,7 +2119,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"User J\",\n  \"phoneNumber\": \"45 12 34 56 78\"\n}",
+									"raw": "{\n  \"name\": \"User Y\",\n  \"phoneNumber\": \"45 12 34 56 78\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2162,7 +2161,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"User J\",\n  \"phoneNumber\": \"12345 12345\"\n}",
+									"raw": "{\n  \"name\": \"User Z\",\n  \"phoneNumber\": \"12345 12345\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2204,7 +2203,7 @@
 								"header": [],
 								"body": {
 									"mode": "raw",
-									"raw": "{\n  \"name\": \"User J\",\n  \"phoneNumber\": \"+1 (703)111-2121\"\n}",
+									"raw": "{\n  \"name\": \"User AA\",\n  \"phoneNumber\": \"+1 (703)111-2121\"\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -2229,8 +2228,198 @@
 					]
 				},
 				{
-					"name": "Invalid",
-					"item": []
+					"name": "CRUD Functionality Tests",
+					"item": [
+						{
+							"name": "list",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status test\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/phonebook/list",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"phonebook",
+										"list"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteByName",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status test\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/phonebook/deleteByName?name=User A",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"phonebook",
+										"deleteByName"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "User A"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteByName (DNE)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status test\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/phonebook/deleteByName?name=Taylor Swift",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"phonebook",
+										"deleteByName"
+									],
+									"query": [
+										{
+											"key": "name",
+											"value": "Taylor Swift"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteByNumber",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status test\", function () {",
+											"    pm.response.to.have.status(200);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/phonebook/deleteByNumber?number=00000",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"phonebook",
+										"deleteByNumber"
+									],
+									"query": [
+										{
+											"key": "number",
+											"value": "00000"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "deleteByNumber (DNE)",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"Status test\", function () {",
+											"    pm.response.to.have.status(404);",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"url": {
+									"raw": "http://localhost:8080/phonebook/deleteByNumber?number=1234431223",
+									"protocol": "http",
+									"host": [
+										"localhost"
+									],
+									"port": "8080",
+									"path": [
+										"phonebook",
+										"deleteByNumber"
+									],
+									"query": [
+										{
+											"key": "number",
+											"value": "1234431223"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				}
 			]
 		}
