@@ -18,7 +18,6 @@ docker build -t app -f Dockerfile ..
 ```
 
 The corresponding output should look similar to:
-
 ![Output of Docker build](./img/img_1.png)
 
 ## 1.2 Run
@@ -32,13 +31,10 @@ docker run -p 8080:80 app
 ```
 
 The corresponding output should look like this:
-
 ![Output of Docker run](./img/img_2.png)
-
 You should now be able to access the API endpoints at `localhost:8080/PhoneBook/{API_ENDPOINT}`. 
 
 For example, to list the phone book entries, visit `localhost:8080/PhoneBook/list`.
-
 ![Sample browser URL field](./img/img_3.png)
 
 # 2. Architecture 
@@ -75,13 +71,18 @@ and removing entries. The logger logs the timestamp, log level, log source, mess
 
 ## 2.5 Models
 
-`PhoneBookEntry`: This is the actual object that users are exposed to via the API. 
+### PhoneBookEntry
+This is the actual object that users are exposed to via the API. 
+
 It contains 2 fields, a name and number, both of which are strings. 
 It is in this object where the input validation is applied via regular expression attributes. 
 The regular expressions are matched and enforced automatically by ASP.NET Core’s “ModelState” check, which asserts that the data matches the model schema.
 
-`PhoneBookEntryDB`: This model is what gets actually stored in the database. 
-It has the same fields as the `PhoneBookEntry` object with an additional GUID field to serve as the primary key. Users are not exposed to this model.
+### PhoneBookEntryDB 
+This model is what gets actually stored in the database. 
+
+It has the same fields as the `PhoneBookEntry` object with an additional GUID field to serve as the primary key. 
+Users are not exposed to this model.
 
 ## 2.6 Persistent Storage
 
